@@ -1,4 +1,9 @@
 ﻿using Microsoft.SharePoint.Client;
+using SharePointProviderHostedWeb.Helpers;
+using SharePointProviderHostedWeb.Models;
+using SharePointProviderHostedWeb.ViewModels;
+using System;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace SharePointProviderHostedWeb.Controllers
@@ -8,25 +13,19 @@ namespace SharePointProviderHostedWeb.Controllers
         [SharePointContextFilter]
         public ActionResult Index()
         {
-            User spUser = null;
+            var requestClient = new HttpRequestClient();
 
-            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            var resultsFromApi = requestClient.GetFixtureTable();
 
-            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            //Write your sharepoint code here
+
+            var model = new Results()
             {
-                if (clientContext != null)
-                {
-                    spUser = clientContext.Web.CurrentUser;
+                ResultsFromAPI = resultsFromApi,
+            };
 
-                    clientContext.Load(spUser, user => user.Title);
+            return View(model);
 
-                    clientContext.ExecuteQuery();
-
-                    ViewBag.UserName = spUser.Title;
-                }
-            }
-
-            return View();
         }
 
         public ActionResult About()

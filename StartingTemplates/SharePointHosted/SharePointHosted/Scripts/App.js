@@ -2,30 +2,35 @@
 
 ExecuteOrDelayUntilScriptLoaded(initializePage, "sp.js");
 
-function initializePage()
-{
-    var context = SP.ClientContext.get_current();
-    var user = context.get_web().get_currentUser();
+function initializePage() {
 
-    // This code runs when the DOM is ready and creates a context object which is needed to use the SharePoint object model
     $(document).ready(function () {
-        getUserName();
+        getAllUsers();
+        $('#addBtn').click(saveUser);
     });
 
-    // This function prepares, loads, and then executes a SharePoint query to get the current users information
-    function getUserName() {
-        context.load(user);
-        context.executeQueryAsync(onGetUserNameSuccess, onGetUserNameFail);
+
+    function saveUser() {
+        //write the code to save a user to the sharepoint list here
     }
 
-    // This function is executed if the above call is successful
-    // It replaces the contents of the 'message' element with the user name
-    function onGetUserNameSuccess() {
-        $('#message').text('Hello ' + user.get_title());
+    function getAllUsers() {
+        //Write the code to get all users from the sharepoint list here
     }
 
-    // This function is executed if the above call fails
-    function onGetUserNameFail(sender, args) {
-        alert('Failed to get user name. Error:' + args.get_message());
+    function addUserToUsersContainer(user) {
+        $('<li>' + user.Title + ' - ' + user.Age + ' (<a href="#" onclick="deleteUser(' + user.Id + ')">Delete User</a>)</li>').appendTo($('#results'));
     }
+
+}
+
+function getQueryStringParameter(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+function deleteUser(userId) {
+    //write the code to delete a user from the sharepoint list here
 }
