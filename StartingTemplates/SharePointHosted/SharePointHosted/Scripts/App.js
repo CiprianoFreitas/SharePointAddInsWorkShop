@@ -1,6 +1,7 @@
 ﻿'use strict';
 
 ExecuteOrDelayUntilScriptLoaded(initializePage, "sp.js");
+var appweburl = decodeURIComponent(getQueryStringParameter('SPAppWebUrl'));
 
 function initializePage() {
 
